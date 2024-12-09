@@ -1,11 +1,12 @@
 # Heart Failure Prediction App
-This Streamlit app predicts heart failure risk using multiple machine learning models.
+This is a web application for predicting heart failure using various machine learning models.
 
 ## Features
-- Logistic Regression
-- Random Forest
-- XGBoost
-- LightGBM
-
-## Usage
-Enter patient data and view predictions from all models.
+- Predicts survival or death based on patient data.
+- Supports multiple machine learning models:
+  - Logistic Regression
+  - Decision Tree
+  - Random Forest
+  - XGBoost
+  - LightGBM
+- Multi-language support (English and Vietnamese).
