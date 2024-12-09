@@ -3,26 +3,26 @@ import pandas as pd
 import joblib
 from translations import translations
 
-# Load các mô hình
+# Load the models
 models = {
     "LogisticRegression": joblib.load("logisticregression.pkl"),
     "DecisionTree": joblib.load("decisiontree.pkl"),
     "RandomForest": joblib.load("randomforest.pkl"),
-    "XGBoost": joblib.load("xgboost.pkl"),
+    "XGBoost": joblib.load("xgboost_optimized.pkl"),  # Load the optimized model
     "LightGBM": joblib.load("lightgbm.pkl"),
 }
 
-# Chọn ngôn ngữ
+# Choose language
 language = st.sidebar.selectbox("Choose Language / Chọn ngôn ngữ", ["English", "Vietnamese"])
-t = translations[language]  # Lấy bản dịch tương ứng
+t = translations[language]  # Get the corresponding translation
 
-# Tiêu đề ứng dụng
+# App title
 st.title(t["title"])
 
-# Form nhập liệu
+# Form for input data
 st.header(t["enter_data"])
 
-# Hiển thị tham số với giải thích gọn gàng
+# Parameter explanations
 with st.expander("Click here for parameter explanations / Bấm để xem giải thích các tham số"):
     st.write(f"**{t['age']}**: {t['age_desc']}")
     st.write(f"**{t['anaemia']}**: {t['anaemia_desc']}")
@@ -37,7 +37,7 @@ with st.expander("Click here for parameter explanations / Bấm để xem giải
     st.write(f"**{t['smoking']}**: {t['smoking_desc']}")
     st.write(f"**{t['time']}**: {t['time_desc']}")
 
-# Các field nhập liệu chính
+# Input fields
 age = st.number_input(t["age"], min_value=0, max_value=120, value=60, help=t["age_desc"])
 anaemia = st.selectbox(t["anaemia"], [0, 1], help=t["anaemia_desc"])
 creatinine_phosphokinase = st.number_input(t["creatinine_phosphokinase"], min_value=0, max_value=10000, value=582, help=t["creatinine_phosphokinase_desc"])
@@ -51,9 +51,9 @@ sex = st.selectbox(t["sex"], [0, 1], help=t["sex_desc"])
 smoking = st.selectbox(t["smoking"], [0, 1], help=t["smoking_desc"])
 time = st.number_input(t["time"], min_value=0, max_value=1000, value=4, help=t["time_desc"])
 
-# Dự đoán khi nhấn nút
+# Make predictions
 if st.button(t["predict"]):
-    # Chuẩn bị dữ liệu đầu vào
+    # Prepare input data
     input_data = {
         "age": age,
         "anaemia": anaemia,
@@ -70,10 +70,10 @@ if st.button(t["predict"]):
     }
     data = pd.DataFrame([input_data])
 
-    # Lấy dự đoán từ tất cả các mô hình
+    # Get predictions from all models
     predictions = {name: int(model.predict(data)[0]) for name, model in models.items()}
 
-    # Hiển thị kết quả
+    # Display results
     st.subheader("Predictions")
     for model_name, prediction in predictions.items():
         result_text = t["survived"] if prediction == 0 else t["death"]
