@@ -8,9 +8,12 @@ models = {
     "LogisticRegression": joblib.load("logisticregression.pkl"),
     "DecisionTree": joblib.load("decisiontree.pkl"),
     "RandomForest": joblib.load("randomforest.pkl"),
-    "XGBoost": joblib.load("xgboost_optimized.pkl"),  # Load the optimized model
+    "XGBoost": joblib.load("xgboost_optimized.pkl"),
     "LightGBM": joblib.load("lightgbm.pkl"),
 }
+
+# Load the scaler
+scaler = joblib.load("scaler.pkl")  # Ensure scaler.pkl is in the same directory as app.py
 
 # Choose language
 language = st.sidebar.selectbox("Choose Language / Chọn ngôn ngữ", ["English", "Vietnamese"])
@@ -70,8 +73,11 @@ if st.button(t["predict"]):
     }
     data = pd.DataFrame([input_data])
 
+    # Scale input data
+    scaled_data = scaler.transform(data)
+
     # Get predictions from all models
-    predictions = {name: int(model.predict(data)[0]) for name, model in models.items()}
+    predictions = {name: int(model.predict(scaled_data)[0]) for name, model in models.items()}
 
     # Display results
     st.subheader("Predictions")
