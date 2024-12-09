@@ -12,7 +12,6 @@ from lightgbm import LGBMClassifier
 from lazypredict.Supervised import LazyClassifier
 from imblearn.over_sampling import SMOTE
 from hyperopt import hp, fmin, tpe, STATUS_OK, Trials
-from skopt import BayesSearchCV
 import joblib  # Để lưu mô hình
 import warnings
 
@@ -49,6 +48,10 @@ def scale_data(X_train, X_test):
     scaler = StandardScaler()
     X_train = scaler.fit_transform(X_train)
     X_test = scaler.transform(X_test)
+    
+    # Lưu scaler
+    joblib.dump(scaler, "scaler.pkl")
+    print("Scaler saved as scaler.pkl")
     return X_train, X_test
 
 # Tự động thử nghiệm mô hình với LazyPredict
